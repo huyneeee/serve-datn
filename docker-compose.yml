@@ -1,0 +1,47 @@
+version: '3.7'
+# networks:
+#   laravel:
+services:  
+  db:
+    image: mysql
+    restart: always
+    ports: 
+      - "3308:3306"
+    environment:
+      MYSQL_DATABASE: 'laravel'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: ""
+    volumes:
+      - my-datavolume:/var/lib/mysql
+  app:
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    image: 'datn'
+    ports:
+      - 8080:80
+    volumes:
+      - ./:/var/www/html
+    environment:
+      DB_CONNECTION: pgsql
+      DB_DATABASE: d53uoeakgmved9
+      DB_HOST: ec2-18-215-96-54.compute-1.53c279c722a48277d7e17dbeadd sslmamazonaws.com
+      DB_PASSWORD: d9777d6ebd5c747bfeb07d63add006d9e2f8953c279c722a48277d7e17dbeadd
+      DB_PORT: 5432
+      DB_USERNAME: skawddfohjjzoz
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    container_name: phpmyadmin
+    links:
+      - db
+    depends_on:
+      - db
+    ports:
+      - "5001:80"
+    environment:
+      PHA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: "alo"
+
+volumes:
+  my-datavolume:
