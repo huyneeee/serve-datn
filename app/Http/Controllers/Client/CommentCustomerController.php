@@ -33,9 +33,8 @@ class CommentCustomerController extends Controller
     {
         $comment_news = $this->comment_new::where('status', '<>', 0)->get();
         return response()->json([
-            'code' => 200,
             'data' => $comment_news,
-        ]);
+        ], 200);
     }
     public function commentNew($id, Request $request)
     {
@@ -46,7 +45,7 @@ class CommentCustomerController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $new_id = $id;
         $new = $this->news::find($id);
@@ -58,8 +57,7 @@ class CommentCustomerController extends Controller
         $model->save();
         return response()->json([
             'data' => $model,
-            'code' => 201,
-        ]);
+        ], 201);
     }
 
     public function viewCommentDeparture()
@@ -69,9 +67,8 @@ class CommentCustomerController extends Controller
             $item->customer;
         }
         return response()->json([
-            'code' => 200,
             'data' => $comment_departures,
-        ]);
+        ], 200);
     }
 
     public function commentDeparture($id, Request $request)
@@ -84,7 +81,7 @@ class CommentCustomerController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $departureId = $id;
         $departure = $this->departure::find($id);
@@ -97,7 +94,6 @@ class CommentCustomerController extends Controller
         $model->save();
         return response()->json([
             'data' => $model,
-            'code' => 201,
-        ]);
+        ], 201);
     }
 }

@@ -6,10 +6,12 @@ use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\Departure;
 use App\Models\Invoice;
+use App\Traits\DeleteModelTrait;
 use Illuminate\Http\Request;
 
 class InvoiceController extends Controller
 {
+    use DeleteModelTrait;
     private $invoice;
     public function __construct(Invoice $invoice)
     {
@@ -39,9 +41,8 @@ class InvoiceController extends Controller
         $invoice_detail->load('departure');
         $invoice_detail->load('payment_invoice');
         return response()->json([
-            'code' => 200,
             'data' => $invoice_detail,
-        ]);
+        ], 200);
     }
     public function update_invoice(Request $request, $id)
     {
@@ -49,8 +50,33 @@ class InvoiceController extends Controller
         $dataUpdate->fill($request->all());
         $dataUpdate->save();
         return response()->json([
-            'code' => 201,
             'data' => $dataUpdate,
         ], 201);
+    }
+    public function viewDelete(Request $request)
+    {
+        $viewDelete = $this->invoice->onlyTrashed()->paginate(5);
+        $viewDelete->load('customer');
+        return response()->json($viewDelete, 200);
+    }
+    public function destroy($id)
+    {
+        return $this->deleteModelTrait($id, $this->invoice);
+    }
+    public function forceDelete($id)
+    {
+        return $this->forceDeleteModelTrait($id, $this->invoice);
+    }
+    public function deleteChecked($id)
+    {
+        return $this->deleteCheckedModelTrait($id, $this->invoice);
+    }
+    public function restore($id)
+    {
+        return $this->restoreModelTrait($id, $this->invoice);
+    }
+    public function restoreAll()
+    {
+        return $this->restoreAllModelTrait($this->invoice);
     }
 }

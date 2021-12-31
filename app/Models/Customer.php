@@ -66,4 +66,8 @@ class Customer extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Invoice::class, 'customers_id');
     }
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id');
+    }
 }

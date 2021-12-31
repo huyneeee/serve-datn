@@ -72,7 +72,7 @@ class CarController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         try {
             DB::beginTransaction();
@@ -113,9 +113,8 @@ class CarController extends Controller
             // $car->policies()->attach($prolicyIds);
             DB::commit();
             return response()->json([
-                'code' => 201,
                 'data' => $car, $image
-            ], status: 201);
+            ], 201);
         } catch (\Exception $exception) {
             DB::rollBack();
             Log::error("message" . $exception->getMessage() . 'Line:' . $exception->getLine());
@@ -134,9 +133,8 @@ class CarController extends Controller
         foreach ($car_id->policies as $item) {
         }
         return response()->json([
-            'code' => 200,
             'data' => $car_id,
-        ]);
+        ], 200);
     }
 
     /**
@@ -164,7 +162,7 @@ class CarController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         try {
             DB::beginTransaction();
@@ -206,9 +204,8 @@ class CarController extends Controller
             // $car->policies()->attach($prolicyIds);
             DB::commit();
             return response()->json([
-                'code' => 201,
                 'data' => $car, $image
-            ], status: 201);
+            ], 200);
         } catch (\Exception $exception) {
             DB::rollBack();
             Log::error("message" . $exception->getMessage() . 'Line:' . $exception->getLine());

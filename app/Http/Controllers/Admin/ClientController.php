@@ -59,9 +59,8 @@ class ClientController extends Controller
     {
         $show_customer =  $this->customer->find($id);
         return response()->json([
-            'code' => 200,
             'data' => $show_customer,
-        ]);
+        ], 200);
     }
 
     /**
@@ -96,7 +95,7 @@ class ClientController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $model = $this->customer->find($id);
         $model->fill($request->all());
@@ -108,12 +107,11 @@ class ClientController extends Controller
         $model->save();
         $token = $model->createToken('api_authcustomer')->plainTextToken;
         return response()->json([
-            'code' => 201,
             'data' => [
                 'token' => $token,
                 'model' => $model,
             ],
-        ]);
+        ], 200);
     }
 
     /**

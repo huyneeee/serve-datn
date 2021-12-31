@@ -31,18 +31,16 @@ class LoginController extends Controller
             $user = $this->user::where('email', $request->email)->first();
             $token = $user->createToken('api_auth')->plainTextToken;
             return response()->json([
-                'code' => '200',
                 'data' => [
                     'token' => $token,
                     'user' => $user,
                 ],
                 "message" => "Đăng Nhập Thành Công",
-            ]);
+            ], 200);
         } else {
             return response()->json([
-                "code" => 401,
                 "message" => "Tài Khoản Hoặc Mật Khẩu Không Đúng",
-            ]);
+            ], 401);
         }
     }
 
@@ -84,7 +82,7 @@ class LoginController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         try {
             DB::beginTransaction();
@@ -104,10 +102,9 @@ class LoginController extends Controller
             $token = $dataInssert->createToken('api_authUser')->plainTextToken;
             DB::commit();
             return response()->json([
-                'code' => 201,
                 'token' => $token,
                 'data' => $dataInssert,
-            ]);
+            ], 201);
         } catch (\Exception $exception) {
             DB::rollBack();
             Log::error("Message :" . $exception->getMessage() . '---Line:' . $exception->getLine());

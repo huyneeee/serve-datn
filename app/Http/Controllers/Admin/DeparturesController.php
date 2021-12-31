@@ -54,8 +54,7 @@ class DeparturesController extends Controller
         return response()->json([
             'data' => $departures,
             'searchData' => $searchData,
-            'code' => '200',
-        ]);
+        ], 200);
     }
     public function departure_invoice($id)
     {
@@ -65,21 +64,19 @@ class DeparturesController extends Controller
             $item->load('payment_invoice');
         }
         return response()->json([
-            'code' => 200,
             'data' => $invoice_departure,
-        ]);
+        ], 200);
     }
     public function getDataRoleCar()
     {
         $user_drive = $this->user::whereHas('roles', function ($query) {
             $query->where('name', 'drive');
         })->get();
-        $all_car = $this->car::all();
+        $all_car = $this->car::where('status', '=', 0)->get();
         return response()->json([
-            'code' => 200,
             'user_drive' => $user_drive,
             'all_car' => $all_car,
-        ]);
+        ], 200);
     }
     /**
      * Store a newly created resource in storage.
@@ -108,15 +105,14 @@ class DeparturesController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $dataInssert = $this->departure;
         $dataInssert->fill($request->all());
         $dataInssert->save();
         return response()->json([
-            'code' => 201,
             'data' => $dataInssert,
-        ]);
+        ], 201);
     }
 
     /**
@@ -129,9 +125,8 @@ class DeparturesController extends Controller
     {
         $departure_id =  $this->departure->find($id);
         return response()->json([
-            'code' => 200,
             'data' => $departure_id,
-        ]);
+        ], 200);
     }
     /**
      * Update the specified resource in storage.
@@ -161,15 +156,14 @@ class DeparturesController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $dataInssert = $this->departure->find($id);
         $dataInssert->fill($request->all());
         $dataInssert->save();
         return response()->json([
-            'code' => 201,
             'data' => $dataInssert,
-        ]);
+        ], 200);
     }
 
     /**

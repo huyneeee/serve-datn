@@ -67,9 +67,8 @@ class CommentNewsController extends Controller
         $comment_news->load('customer');
         $comment_news->load('new');
         return response()->json([
-            'code' => 200,
             'data' => $comment_news,
-        ]);
+        ], 200);
     }
 
     /**
@@ -88,8 +87,7 @@ class CommentNewsController extends Controller
         $comment_news->save();
         return response()->json([
             'data' => $comment_news,
-            'code' => 201,
-        ]);
+        ], 200);
     }
 
     /**

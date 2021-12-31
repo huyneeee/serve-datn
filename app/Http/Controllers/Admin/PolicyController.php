@@ -51,14 +51,13 @@ class PolicyController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $policy = $this->policy->fill($request->all());
         $policy->save();
         return response()->json([
-            'code' => 201,
             'data' => $policy,
-        ]);
+        ], 201);
     }
 
     /**
@@ -71,9 +70,8 @@ class PolicyController extends Controller
     {
         $policy_id =  $this->policy->find($id);
         return response()->json([
-            'code' => 200,
             'data' => $policy_id,
-        ]);
+        ], 200);
     }
 
     /**
@@ -93,14 +91,13 @@ class PolicyController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $policy = $this->policy->find($id)->fill($request->all());
         $policy->save();
         return response()->json([
-            'code' => 200,
             'data' => $policy,
-        ]);
+        ], 200);
     }
 
     /**

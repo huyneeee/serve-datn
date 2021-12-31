@@ -51,10 +51,9 @@ class RoleController extends Controller
             $permissionChildrent_id = $item->permissionChildrent;
         }
         return response()->json([
-            'code' => 200,
             'data' => $permisionsParent,
             // 'permissionChildrent_id' => $permissionChildrent_id,
-        ]);
+        ], 200);
     }
     public function store(Request $request)
     {
@@ -66,15 +65,14 @@ class RoleController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $role = $this->role->fill($request->all());
         $role->save();
         $role->permissions()->attach($request->permission_id);
         return response()->json([
-            'code' => 201,
             'data' => $role,
-        ]);
+        ], 201);
     }
     /**
      * Display the specified resource.
@@ -86,9 +84,8 @@ class RoleController extends Controller
     {
         $role =  $this->role->find($id);
         return response()->json([
-            'code' => 200,
             'data' => $role,
-        ]);
+        ], 200);
     }
 
     /**
@@ -123,15 +120,14 @@ class RoleController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $role = $this->role->find($id)->fill($request->all());
         $role->save();
         $role->permissions()->sync($request->permission_id);
         return response()->json([
-            'code' => 200,
             'data' => $role,
-        ]);
+        ], 200);
     }
 
     /**

@@ -166,8 +166,10 @@ class PageController extends Controller
     //lịch sử đặt chuyến
     public function historyInvoice(Request $request)
     {
-        $customer_id = $request->user();
-        foreach ($customer_id->customer_invoice as $item) {
+        $pagesize = 10;
+        $searchData = $request->except('page');
+        $customer_id = $request->user()->customer_invoice()->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
+        foreach ($customer_id as $item) {
             $item->load('departure');
             $item->load('payment_invoice');
         }

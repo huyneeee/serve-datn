@@ -16,5 +16,10 @@ class Notification extends Model
         'content',
         'user_id',
         'status',
+        'is_send',
     ];
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'user_id');
+    }
 }

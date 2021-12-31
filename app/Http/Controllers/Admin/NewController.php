@@ -81,7 +81,7 @@ class NewController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $dataImageNews = $this->storageTraitUpload($request, 'image', 'news');
         $dataInssert = $this->news->create([
@@ -96,8 +96,7 @@ class NewController extends Controller
         ]);
         return response()->json([
             'data' => $dataInssert,
-            'code' => 201,
-        ]);
+        ], 201);
     }
 
     /**
@@ -110,9 +109,8 @@ class NewController extends Controller
     {
         $news_id =  $this->news->find($id);
         return response()->json([
-            'code' => 200,
             'data' => $news_id,
-        ]);
+        ], 200);
     }
 
     /**
@@ -137,7 +135,7 @@ class NewController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $dataUpdate = [
             'name' => $request->name,
@@ -155,8 +153,7 @@ class NewController extends Controller
         $this->news->find($id)->update($dataUpdate);
         return response()->json([
             'data' => $dataUpdate,
-            'code' => 201,
-        ]);
+        ], 201);
     }
 
     /**

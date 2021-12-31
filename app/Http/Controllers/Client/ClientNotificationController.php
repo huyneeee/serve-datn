@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 
-class NotificationController extends Controller
+class ClientNotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -54,10 +54,18 @@ class NotificationController extends Controller
     {
         $pagesize = 10;
         $searchData = $request->except('page');
-        $customer_id = $this->customer->find($id)->notifications()->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
+        $customer_id = $this->customer->find($id)->notifications()->where('is_send', '=', 1)->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
         return response()->json($customer_id, 200);
     }
-
+    //đếm thông báo của customer
+    public function customerCount(Request $request, $id)
+    {
+        $customer_is_send = $this->customer->find($id)->notifications()->where('is_send', '=', 1)->get();
+        $customer_count =   $customer_is_send->where('status', '=', 0)->count();
+        return response()->json([
+            'data' => $customer_count
+        ], 200);
+    }
     /**
      * Update the specified resource in storage.
      *

@@ -75,7 +75,7 @@ class NewCategoryController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $dataImageNewCategory = $this->storageTraitUpload($request, 'image', 'new_categories');
         $dataInssert = $this->newCategory->create([
@@ -88,8 +88,7 @@ class NewCategoryController extends Controller
         ]);
         return response()->json([
             'data' => $dataInssert,
-            'code' => 201,
-        ]);
+        ], 201);
     }
 
     /**
@@ -102,9 +101,8 @@ class NewCategoryController extends Controller
     {
         $newCategory_id =  $this->newCategory->find($id);
         return response()->json([
-            'code' => 200,
             'data' => $newCategory_id,
-        ]);
+        ], 200);
     }
     /**
      * Update the specified resource in storage.
@@ -126,7 +124,7 @@ class NewCategoryController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $dataUpdate = [
             'name' => $request->name,
@@ -142,8 +140,7 @@ class NewCategoryController extends Controller
         $this->newCategory->find($id)->update($dataUpdate);
         return response()->json([
             'data' => $dataUpdate,
-            'code' => 201,
-        ]);
+        ], 200);
     }
 
     /**

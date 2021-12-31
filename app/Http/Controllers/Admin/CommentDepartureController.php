@@ -66,9 +66,8 @@ class CommentDepartureController extends Controller
         $comment_departures->load('customer');
         $comment_departures->load('departure');
         return response()->json([
-            'code' => 200,
             'data' => $comment_departures,
-        ]);
+        ], 200);
     }
 
     /**
@@ -87,8 +86,7 @@ class CommentDepartureController extends Controller
         $comment_departures->save();
         return response()->json([
             'data' => $comment_departures,
-            'code' => 201,
-        ]);
+        ], 200);
     }
 
     /**

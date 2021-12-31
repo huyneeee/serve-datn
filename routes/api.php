@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\NewPasswordController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Client\ClientNotificationController;
 use App\Http\Controllers\Client\CommentCustomerController;
 use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\CustommerController;
@@ -172,10 +173,6 @@ Route::prefix('admin')->group(function () {
             Route::get('restore/{id}', [ClientController::class, 'restore'])->middleware('can:client-restore');
             Route::get('restore-all', [ClientController::class, 'restoreAll'])->middleware('can:client-restoreAll');
         });
-        Route::prefix('notification')->group(function () {
-            Route::get('index', [NotificationController::class, 'index']);
-            Route::post('store', [NotificationController::class, 'store']);
-        });
         Route::prefix('contacts')->group(function () {
             Route::get('index', [AdminContactController::class, 'index']);
             // Route::get('show/{id}', [AdminContactController::class, 'show']);
@@ -191,12 +188,12 @@ Route::prefix('admin')->group(function () {
             Route::get('detail/{id}', [InvoiceController::class, 'invoice_detail']);
             Route::post('update/{id}', [InvoiceController::class, 'update_invoice']);
             // Route::get('show/{id}', [AdminContactController::class, 'show']);
-            // Route::delete('delete/{id}', [AdminContactController::class, 'destroy']);
-            // Route::delete('force-delete/{id}', [AdminContactController::class, 'forceDelete']);
-            // Route::get('view-delete', [AdminContactController::class, 'viewDelete']);
-            // Route::delete('delete-checked/{id}', [AdminContactController::class, 'deleteChecked']);
-            // Route::get('restore/{id}', [AdminContactController::class, 'restore']);
-            // Route::get('restore-all', [AdminContactController::class, 'restoreAll']);
+            Route::delete('delete/{id}', [InvoiceController::class, 'destroy']);
+            Route::delete('force-delete/{id}', [InvoiceController::class, 'forceDelete']);
+            Route::get('view-delete', [InvoiceController::class, 'viewDelete']);
+            Route::delete('delete-checked/{id}', [InvoiceController::class, 'deleteChecked']);
+            Route::get('restore/{id}', [InvoiceController::class, 'restore']);
+            Route::get('restore-all', [InvoiceController::class, 'restoreAll']);
         });
         Route::prefix('dashboard')->group(function () {
             Route::get('index', [DashboardController::class, 'index']);
@@ -239,6 +236,13 @@ Route::prefix('client')->group(function () {
         Route::prefix('invoice')->group(function () {
             Route::post('add-invoice/{id}', [PageController::class, 'addInvoice'])->middleware('auth:sanctum');
             Route::get('history-invoice', [PageController::class, 'historyInvoice'])->middleware('auth:sanctum');
+        });
+        Route::prefix('notification')->group(function () {
+            Route::get('index', [ClientNotificationController::class, 'index']);
+            Route::post('store', [ClientNotificationController::class, 'store'])->middleware('auth:sanctum');
+            Route::post('update/{id}', [ClientNotificationController::class, 'update'])->middleware('auth:sanctum');
+            Route::get('customer/{id}', [ClientNotificationController::class, 'customer'])->middleware('auth:sanctum');
+            Route::get('customer-count/{id}', [ClientNotificationController::class, 'customerCount'])->middleware('auth:sanctum');
         });
     });
     Route::post('create', [PaymentsController::class, 'create'])->middleware('auth:sanctum');

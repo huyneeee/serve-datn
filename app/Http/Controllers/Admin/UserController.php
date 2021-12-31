@@ -93,7 +93,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         try {
             DB::beginTransaction();
@@ -135,9 +135,8 @@ class UserController extends Controller
         foreach ($user->roles as $item) {
         }
         return response()->json([
-            'code' => 200,
             'data' => $user,
-        ]);
+        ], 200);
     }
 
     /**
@@ -165,9 +164,8 @@ class UserController extends Controller
         $dataUpdate->save();
         $dataUpdate->roles()->sync($request->role_id);
         return response()->json([
-            'code' => 201,
             'data' => $dataUpdate,
-        ]);
+        ], 200);
     }
     public function update(Request $request, $id)
     {
@@ -190,7 +188,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         try {
             DB::beginTransaction();
@@ -209,9 +207,8 @@ class UserController extends Controller
             $dataUpdate->roles()->sync($request->role_id);
             DB::commit();
             return response()->json([
-                'code' => 201,
                 'data' => $dataUpdate,
-            ]);
+            ], 200);
         } catch (\Exception $exception) {
             DB::rollBack();
             Log::error("Message :" . $exception->getMessage() . '---Line:' . $exception->getLine());

@@ -121,12 +121,11 @@ class CustommerController extends Controller
         $model->save();
         $token = $model->createToken('api_authcustomer')->plainTextToken;
         return response()->json([
-            'code' => 201,
             'data' => [
                 'token' => $token,
                 'model' => $model,
             ],
-        ]);
+        ], 201);
     }
 
     /**

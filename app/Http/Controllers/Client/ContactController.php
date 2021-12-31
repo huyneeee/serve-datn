@@ -25,14 +25,13 @@ class ContactController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $validator->errors()
-            ]);
+            ], 400);
         }
         $contactAll = $this->contact;
         $contactAll->fill($request->all());
         $contactAll->save();
         return response()->json([
-            'code' => 201,
             'data' => $contactAll,
-        ]);
+        ], 201);
     }
 }
