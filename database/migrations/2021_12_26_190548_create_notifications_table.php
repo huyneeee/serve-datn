@@ -18,7 +18,7 @@ class CreateNotificationsTable extends Migration
             $table->string('token_device');
             $table->string('invoice_id');
             $table->string('title');
-            $table->string('content');
+            $table->text('content');
             $table->bigInteger('user_id');
             $table->string('status');
             $table->integer('is_send')->default(0);
