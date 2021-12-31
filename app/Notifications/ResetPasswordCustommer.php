@@ -42,12 +42,12 @@ class ResetPasswordCustommer extends Notification
     public function toMail($notifiable)
     {
         $url = url('reset-password/?token=' . $this->token);
-        $urlArr = explode('/',$url);
-        $fakeUrl = env('APP_URL') . $urlArr[3];
-        
+        $urlArr = explode('/', $url);
+        $fakeUrl = env('WEB_URL') . $urlArr[3];
+
         return (new MailMessage)
             ->line('You are receiving this email because we received a password reset request for your account.')
-            ->action('Reset Password',$fakeUrl)
+            ->action('Reset Password', $fakeUrl)
             ->line('If you did not request a password reset, no further action is required.');
     }
 

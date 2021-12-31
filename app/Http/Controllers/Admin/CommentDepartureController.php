@@ -98,6 +98,8 @@ class CommentDepartureController extends Controller
     public function viewDelete(Request $request)
     {
         $viewDelete = $this->comment_departure->onlyTrashed()->paginate(5);
+        $viewDelete->load('customer');
+        $viewDelete->load('departure');
         return response()->json($viewDelete, 200);
     }
     public function destroy($id)

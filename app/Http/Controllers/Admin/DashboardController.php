@@ -60,13 +60,13 @@ class DashboardController extends Controller
         $date_365 = Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->toDateString();
         $now = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
         if ($request->seven_date == "7ngay") {
-            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('time', [$seven_date, $now])->sum('price');
+            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('date', [$seven_date, $now])->sum('price');
         } elseif ($request->thangtruoc == "thangtruoc") {
-            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('time', [$dauthangtruoc, $cuoithangtruoc])->sum('price');
+            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('date', [$dauthangtruoc, $cuoithangtruoc])->sum('price');
         } elseif ($request->thangnay == "thangnay") {
-            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('time', [$dauthangtruoc, $now])->sum('price');
+            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('date', [$dauthangtruoc, $now])->sum('price');
         } else {
-            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('time', [$date_365, $now])->sum('price');
+            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('date', [$date_365, $now])->sum('price');
         }
         // foreach ($invoice as $key => $value) {
         //     $invoice_data[] = array(

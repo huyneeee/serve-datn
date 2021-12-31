@@ -123,9 +123,9 @@ class PaymentsController extends Controller
                 'code_bank' => $inputData['vnp_BankCode'],
             ];
             Payment::insert($data);
-            return redirect(env('APP_URL').'payment?success');
+            return redirect(env('WEB_URL') . 'payment?success');
         } else {
-            return redirect(env('APP_URL').'payment?fail');
+            return redirect(env('WEB_URL') . 'payment?fail');
         }
     }
 }
