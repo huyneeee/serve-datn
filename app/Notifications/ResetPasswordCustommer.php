@@ -43,7 +43,7 @@ class ResetPasswordCustommer extends Notification
     {
         $url = url('reset-password/?token=' . $this->token);
         $urlArr = explode('/',$url);
-        $fakeUrl = 'http://localhost:3000/' . $urlArr[3];
+        $fakeUrl = env('APP_URL') . $urlArr[3];
         
         return (new MailMessage)
             ->line('You are receiving this email because we received a password reset request for your account.')
