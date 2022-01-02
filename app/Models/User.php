@@ -29,6 +29,7 @@ class User extends Authenticatable
         'experience',
         'image_degree',
         'description',
+        'status_drive',
     ];
 
     /**

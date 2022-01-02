@@ -8,14 +8,17 @@ use App\Models\Departure;
 use App\Models\Invoice;
 use App\Traits\DeleteModelTrait;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class InvoiceController extends Controller
 {
     use DeleteModelTrait;
     private $invoice;
-    public function __construct(Invoice $invoice)
+    private $departure;
+    public function __construct(Invoice $invoice, Departure $departure)
     {
         $this->invoice = $invoice;
+        $this->departure = $departure;
     }
     public function index(Request $request)
     {
@@ -52,6 +55,48 @@ class InvoiceController extends Controller
         return response()->json([
             'data' => $dataUpdate,
         ], 201);
+    }
+    //update chuyến 
+    public function updateDeparture(Request $request, $id)
+    {
+        $model = $this->departure->find($id);
+        $model->fill($request->all());
+        $model->save();
+        return response()->json([
+            'data' => $model,
+        ], 201);
+    }
+    //list chuyến theo điều kiện
+    public function whereDeparture(Request $request)
+    {
+        $pagesize = 5;
+        $searchData = $request->except('page');
+        $ten_minutes = Carbon::now('Asia/Ho_Chi_Minh')->addHours(1)->toDateTimeString();
+        $departureWhereTime = $this->departure->where('start_time', '>', $ten_minutes);
+        $departureWhere = $departureWhereTime->where('seats_departures', '<>', 0);
+        if ($departureWhere == true) {
+            if ($request->has('go_location_city') && $request->go_location_city != "") {
+                $departureWhere = $departureWhere->where('go_location_city', 'like', "%" . $request->go_location_city . "%");
+            }
+            if ($request->has('come_location_city') && $request->come_location_city != "") {
+                $departureWhere = $departureWhere->where('come_location_city', 'like', "%" . $request->come_location_city . "%");
+            }
+            if ($request->has('start_time') && $request->start_time != "") {
+                $departureWhere = $departureWhere->whereBetween('start_time', [$request->start_time, date("Y-m-d", strtotime('+7 day', strtotime($request->start_time)))]);
+            }
+            if ($request->has('name') && $request->name != "") {
+                $departureWhere = $departureWhere->where('name', 'like', "%" . $request->name . "%");
+            }
+            if ($request->price_form && $request->price_to != "") {
+                $departureWhere = $departureWhere->whereBetween('price', [$request->price_form, $request->price_to]);
+            }
+
+            $departures = $departureWhere->orderBy('start_time', 'asc')->paginate($pagesize)->appends($searchData);
+            $departures->load('car_departure');
+            $departures->load('user_departure');
+
+            return response()->json($departures, 200);
+        }
     }
     public function viewDelete(Request $request)
     {

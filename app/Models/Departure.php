@@ -24,16 +24,14 @@ class Departure extends Model
         'start_time',
         'end_time',
         'seats_departures',
+        'departure_code',
     ];
 
     public function car_departure()
     {
         return $this->belongsTo(Car::class, 'car_id');
     }
-    public function car_images()
-    {
-        return $this->hasMany(CarImage::class, 'car_id');
-    }
+
     public function invoice_departure()
     {
         return $this->hasMany(Invoice::class, 'departure_id');
@@ -45,9 +43,5 @@ class Departure extends Model
     public function user_departure()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-    public function policies()
-    {
-        return $this->belongsToMany(Policy::class, 'car_policy', 'car_id', 'policy_id')->withTimestamps();
     }
 }

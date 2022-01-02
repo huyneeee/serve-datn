@@ -45,6 +45,9 @@ class DeparturesController extends Controller
             if ($request->has('car_id') && $request->car_id != "") {
                 $departuresQuery = $departuresQuery->where('car_id', $request->car_id);
             }
+            if ($request->has('departure_code') && $request->departure_code != "") {
+                $departuresQuery = $departuresQuery->where('departure_code', $request->departure_code);
+            }
 
             $departures = $departuresQuery->orderBy('id', 'desc')->paginate($pagesize)->appends($searchData);
             $departures->load('car_departure');
@@ -70,12 +73,33 @@ class DeparturesController extends Controller
     public function getDataRoleCar()
     {
         $user_drive = $this->user::whereHas('roles', function ($query) {
-            $query->where('name', 'drive');
+            $drive =   $query->where('name', 'drive');
+            $drive->where('status_drive', '=', '0');
         })->get();
         $all_car = $this->car::where('status', '=', 0)->get();
         return response()->json([
             'user_drive' => $user_drive,
             'all_car' => $all_car,
+        ], 200);
+    }
+    //update user role
+    public function updateUserDrive(Request $request, $id)
+    {
+        $model = $this->user->find($id);
+        $model->fill($request->all());
+        $model->save();
+        return response()->json([
+            'data' => $model,
+        ], 200);
+    }
+    //update xe
+    public function updateCar(Request $request, $id)
+    {
+        $model = $this->car->find($id);
+        $model->fill($request->all());
+        $model->save();
+        return response()->json([
+            'data' => $model,
         ], 200);
     }
     /**
@@ -84,6 +108,16 @@ class DeparturesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function randomCode($lenght = 6)
+    {
+        $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $codeAlphabetLenght = strlen($codeAlphabet);
+        $randomString = '';
+        for ($i = 0; $i < $lenght; $i++) {
+            $randomString .= $codeAlphabet[rand(0, $codeAlphabetLenght - 1)];
+        }
+        return $randomString;
+    }
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -109,6 +143,7 @@ class DeparturesController extends Controller
         }
         $dataInssert = $this->departure;
         $dataInssert->fill($request->all());
+        $dataInssert->departure_code = $this->randomCode();
         $dataInssert->save();
         return response()->json([
             'data' => $dataInssert,
@@ -124,6 +159,8 @@ class DeparturesController extends Controller
     public function show($id)
     {
         $departure_id =  $this->departure->find($id);
+        $departure_id->load('car_departure');
+        $departure_id->load('user_departure');
         return response()->json([
             'data' => $departure_id,
         ], 200);

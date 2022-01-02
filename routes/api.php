@@ -93,6 +93,8 @@ Route::prefix('admin')->group(function () {
             Route::get('index', [DeparturesController::class, 'index'])->middleware('can:departure-list');
             Route::get('detail-invoice/{id}', [DeparturesController::class, 'departure_invoice']);
             Route::get('getDataRoleCar', [DeparturesController::class, 'getDataRoleCar']);
+            Route::post('update-user-drive/{id}', [DeparturesController::class, 'updateUserDrive']);
+            Route::post('update-car/{id}', [DeparturesController::class, 'updateCar']);
             Route::get('show/{id}', [DeparturesController::class, 'show'])->middleware('can:departure-show');
             Route::post('store', [DeparturesController::class, 'store'])->middleware('can:departure-add');
             Route::post('update/{id}', [DeparturesController::class, 'update'])->middleware('can:departure-edit');
@@ -187,6 +189,8 @@ Route::prefix('admin')->group(function () {
             Route::get('index', [InvoiceController::class, 'index']);
             Route::get('detail/{id}', [InvoiceController::class, 'invoice_detail']);
             Route::post('update/{id}', [InvoiceController::class, 'update_invoice']);
+            Route::get('where-departure', [InvoiceController::class, 'whereDeparture']);
+            Route::post('update-departure/{id}', [InvoiceController::class, 'updateDeparture']);
             // Route::get('show/{id}', [AdminContactController::class, 'show']);
             Route::delete('delete/{id}', [InvoiceController::class, 'destroy']);
             Route::delete('force-delete/{id}', [InvoiceController::class, 'forceDelete']);
@@ -229,6 +233,8 @@ Route::prefix('client')->group(function () {
         Route::post('update-departure/{id}', [PageController::class, 'updateDeparture']);
         //show chuyến theo bộ lọc
         Route::get('departure-filter', [PageController::class, 'departureFilter']);
+        //show dịch vụ xe theo xe
+        Route::get('car-departure/{id}', [PageController::class, 'carDeparture']);
         //show invoice theo mã
         Route::get('invoice-code-filter', [PageController::class, 'invoiceCodeFilter']);
         //trang liên hệ

@@ -16,6 +16,7 @@ class CreateDeparturesTable extends Migration
         Schema::create('departures', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('departure_code')->unique()->comment('Mã chuyến');
             $table->bigInteger('user_id');
             $table->bigInteger('car_id');
             $table->integer('price')->default(0);

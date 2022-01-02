@@ -17,7 +17,7 @@ class CreateInvoicesTable extends Migration
             $table->id();
             $table->bigInteger('departure_id');
             $table->bigInteger('customers_id');
-            $table->string('invoice_code')->uniqid()->comment('Mã thanh toán');
+            $table->string('invoice_code')->unique()->comment('Mã thanh toán');
             $table->string('phone');
             $table->text('note');
             $table->string('name');

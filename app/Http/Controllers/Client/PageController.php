@@ -87,11 +87,17 @@ class PageController extends Controller
             $departures = $departureWhere->orderBy('start_time', 'asc')->paginate($pagesize)->appends($searchData);
             $departures->load('car_departure');
             $departures->load('user_departure');
-            $departures->load('car_images');
-            $departures->load('policies');
-
             return response()->json($departures, 200);
         }
+    }
+    public function carDeparture(Request $request, $id)
+    {
+        $car_id = $this->car->find($id);
+        $car_id->load('car_images');
+        $car_id->load('policies');
+        return response()->json([
+            'data' => $car_id,
+        ], 200);
     }
     //Bình luận chuyến
     public function view_comment_departure(Request $request, $id)

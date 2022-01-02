@@ -112,6 +112,12 @@ class RoleController extends Controller
     }
     public function update(Request $request, $id)
     {
+        // dd(json_decode($request));
+        // return response()->json([
+        //     'code' => 200,
+        //     'data' => $request->all(),
+        // ]);
+
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'display_name' => 'required',
