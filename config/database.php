@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Str;
-
+$DATABASE_URL=parse_url('DATABASE_URL');
 return [
 
     /*
@@ -46,10 +46,11 @@ return [
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host'      => env('DB_HOST', 'us-cdbr-east-05.cleardb.net'),
-            'database'  => env('DB_DATABASE', 'heroku_9172c370e8feae7'),
-            'username'  => env('DB_USERNAME', 'b4ac7a17768a74'),
-            'password'  => env('DB_PASSWORD', 'd8ec8115'),
+            'host' =>     isset($DATABASE_URL['host']) ? $DATABASE_URL['host'] : null,
+            'port' =>     isset($DATABASE_URL['port']) ? $DATABASE_URL['port'] : null,
+            'database' => isset($DATABASE_URL['path']) ? ltrim( $DATABASE_URL['path'], "/") : null,
+            'username' => isset($DATABASE_URL['user']) ? $DATABASE_URL['user'] : null,
+            'password' => isset($DATABASE_URL['pass']) ? $DATABASE_URL['pass'] : null,
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
