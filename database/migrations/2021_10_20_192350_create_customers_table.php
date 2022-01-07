@@ -19,7 +19,7 @@ class CreateCustomersTable extends Migration
             $table->string('first_name')->comment('Tên');
             $table->string('email')->unique();
             $table->string('password');
-            $table->json('address')->nullable();
+            $table->text('address')->nullable();
             $table->string('phone_number')->unique();
             $table->string('image')->nullable();
             $table->integer('status')->default(1);
