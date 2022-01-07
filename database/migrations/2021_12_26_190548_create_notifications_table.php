@@ -22,6 +22,7 @@ class CreateNotificationsTable extends Migration
             $table->bigInteger('user_id');
             $table->string('status');
             $table->integer('is_send')->default(0);
+            $table->bigInteger('role_id');
             $table->timestamps();
         });
     }

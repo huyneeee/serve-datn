@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Customer;
 use App\Models\Notification;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class NotificationController extends Controller
@@ -15,11 +15,11 @@ class NotificationController extends Controller
      * @return \Illuminate\Http\Response
      */
     private $notification;
-    private $customer;
-    public function __construct(Notification $notification, Customer $customer)
+    private $role;
+    public function __construct(Notification $notification, Role $role)
     {
         $this->notification = $notification;
-        $this->customer = $customer;
+        $this->role = $role;
     }
     public function index()
     {
@@ -50,14 +50,23 @@ class NotificationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function customer(Request $request, $id)
+    public function usersRole(Request $request, $id)
     {
         $pagesize = 10;
         $searchData = $request->except('page');
-        $customer_id = $this->customer->find($id)->notifications()->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
-        return response()->json($customer_id, 200);
+        $usersRole_id = $this->role->find($id)->notification_role()->where('is_send', '=', 1)->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
+        return response()->json($usersRole_id, 200);
     }
 
+    //đếm thông báo của user
+    public function usersRoleCount(Request $request, $id)
+    {
+        $usersRole_id = $this->role->find($id)->notification_role()->where('is_send', '=', 1)->get();
+        $usersRole_count =   $usersRole_id->where('status', '=', 0)->count();
+        return response()->json([
+            'data' => $usersRole_count
+        ], 200);
+    }
     /**
      * Update the specified resource in storage.
      *
