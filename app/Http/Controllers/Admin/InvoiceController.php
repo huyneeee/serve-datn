@@ -78,6 +78,9 @@ class InvoiceController extends Controller
             if ($request->has('go_location_city') && $request->go_location_city != "") {
                 $departureWhere = $departureWhere->where('go_location_city', 'like', "%" . $request->go_location_city . "%");
             }
+            if ($request->has('id_departure') && $request->id_departure != "") {
+                $departureWhere = $departureWhere->where('id', '<>', $request->id_departure);
+            }
             if ($request->has('come_location_city') && $request->come_location_city != "") {
                 $departureWhere = $departureWhere->where('come_location_city', 'like', "%" . $request->come_location_city . "%");
             }
@@ -94,14 +97,47 @@ class InvoiceController extends Controller
             $departures = $departureWhere->orderBy('start_time', 'asc')->paginate($pagesize)->appends($searchData);
             $departures->load('car_departure');
             $departures->load('user_departure');
-
             return response()->json($departures, 200);
         }
+    }
+    //vé đã được xác nhận
+    public function Confirmed(Request $request)
+    {
+        $confirmed_invoice = $this->invoice->where('status', '=', 1)->orderBy('id', 'desc')->paginate(10);
+        $confirmed_invoice->load('departure');
+        $confirmed_invoice->load('payment_invoice');
+        return response()->json($confirmed_invoice, 200);
+    }
+    //vé chưa xác nhận
+    public function Unconfimred(Request $request)
+    {
+        $unconfimred_invoice = $this->invoice->where('status', '=', 0)->orderBy('id', 'desc')->paginate(10);
+        $unconfimred_invoice->load('departure');
+        $unconfimred_invoice->load('payment_invoice');
+        return response()->json($unconfimred_invoice, 200);
+    }
+    //count trạng thái của vé
+    public function countStatus(Request $request)
+    {
+        $confirmed_invoice = $this->invoice->where('status', '=', 1)->count();
+        $unconfimred_invoice = $this->invoice->where('status', '=', 0)->count();
+        $viewDelete = $this->invoice->onlyTrashed()->count();
+        return response()->json([
+            'data' => [
+                'confirmed_invoice' => $confirmed_invoice,
+                'unconfimred_invoice' => $unconfimred_invoice,
+                'viewDelete' => $viewDelete
+            ]
+        ], 200);
     }
     public function viewDelete(Request $request)
     {
         $viewDelete = $this->invoice->onlyTrashed()->paginate(5);
-        $viewDelete->load('customer');
+        foreach ($viewDelete as $item) {
+            $item->load('customer');
+            $item->load('departure');
+            $item->load('payment_invoice');
+        }
         return response()->json($viewDelete, 200);
     }
     public function destroy($id)

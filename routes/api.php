@@ -190,14 +190,22 @@ Route::prefix('admin')->group(function () {
             Route::get('detail/{id}', [InvoiceController::class, 'invoice_detail']);
             Route::post('update/{id}', [InvoiceController::class, 'update_invoice']);
             Route::get('where-departure', [InvoiceController::class, 'whereDeparture']);
+            Route::get('confirmed', [InvoiceController::class, 'Confirmed']);
             Route::post('update-departure/{id}', [InvoiceController::class, 'updateDeparture']);
-            // Route::get('show/{id}', [AdminContactController::class, 'show']);
+            Route::get('unconfimred', [InvoiceController::class, 'Unconfimred']); //chưa xác nhận
+            Route::get('count-status', [InvoiceController::class, 'countStatus']); //count trạng thái của vé
             Route::delete('delete/{id}', [InvoiceController::class, 'destroy']);
             Route::delete('force-delete/{id}', [InvoiceController::class, 'forceDelete']);
             Route::get('view-delete', [InvoiceController::class, 'viewDelete']);
             Route::delete('delete-checked/{id}', [InvoiceController::class, 'deleteChecked']);
             Route::get('restore/{id}', [InvoiceController::class, 'restore']);
             Route::get('restore-all', [InvoiceController::class, 'restoreAll']);
+        });
+        Route::prefix('notification')->group(function () {
+            Route::post('store', [NotificationController::class, 'store']);
+            Route::post('update/{id}', [NotificationController::class, 'update']);
+            Route::get('users-role/{id}', [NotificationController::class, 'usersRole']);
+            Route::get('users-role-count/{id}', [NotificationController::class, 'usersRoleCount']);
         });
         Route::prefix('dashboard')->group(function () {
             Route::get('index', [DashboardController::class, 'index']);
@@ -249,6 +257,10 @@ Route::prefix('client')->group(function () {
             Route::post('update/{id}', [ClientNotificationController::class, 'update'])->middleware('auth:sanctum');
             Route::get('customer/{id}', [ClientNotificationController::class, 'customer'])->middleware('auth:sanctum');
             Route::get('customer-count/{id}', [ClientNotificationController::class, 'customerCount'])->middleware('auth:sanctum');
+        });
+        Route::prefix('news')->group(function () {
+            Route::get('list', [PageController::class, 'newList']);
+            Route::get('detail/{slug}', [PageController::class, 'newDetail']);
         });
     });
     Route::post('create', [PaymentsController::class, 'create'])->middleware('auth:sanctum');

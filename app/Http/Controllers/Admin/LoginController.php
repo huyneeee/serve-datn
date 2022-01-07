@@ -29,6 +29,7 @@ class LoginController extends Controller
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = $this->user::where('email', $request->email)->first();
+            $user->load('roles');
             $token = $user->createToken('api_auth')->plainTextToken;
             return response()->json([
                 'data' => [

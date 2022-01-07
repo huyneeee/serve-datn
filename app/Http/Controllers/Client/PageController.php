@@ -7,6 +7,7 @@ use App\Models\Car;
 use App\Models\Customer;
 use App\Models\Departure;
 use App\Models\Invoice;
+use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -22,12 +23,14 @@ class PageController extends Controller
     private $departure;
     private $car;
     private $customer;
-    public function __construct(Invoice $invoice, Departure $departure, Car $car, Customer $customer)
+    private $news;
+    public function __construct(Invoice $invoice, Departure $departure, Car $car, Customer $customer, News $news)
     {
         $this->invoice = $invoice;
         $this->departure = $departure;
         $this->car = $car;
         $this->customer = $customer;
+        $this->news = $news;
     }
 
     // public function departureAll(Request $request)
@@ -181,6 +184,20 @@ class PageController extends Controller
         }
         return response()->json([
             'data' => $customer_id,
+        ], 200);
+    }
+
+    //list tin tức
+    public function newList(Request $request)
+    {
+        $news = $this->news->orderBy('id', 'desc')->paginate(10);
+        return response()->json($news, 200);
+    }
+    public function newDetail($slug)
+    {
+        $new_detail = $this->news->where('slug', '=', $slug)->first();
+        return response()->json([
+            'data' => $new_detail,
         ], 200);
     }
 }

@@ -17,9 +17,14 @@ class Notification extends Model
         'user_id',
         'status',
         'is_send',
+        'role_id',
     ];
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'user_id');
+    }
+    public function notification_role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }
