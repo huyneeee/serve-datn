@@ -190,6 +190,9 @@ Route::prefix('admin')->group(function () {
             Route::get('detail/{id}', [InvoiceController::class, 'invoice_detail']);
             Route::post('update/{id}', [InvoiceController::class, 'update_invoice']);
             Route::get('where-departure', [InvoiceController::class, 'whereDeparture']);
+            Route::get('departure-confirmed/{id}', [InvoiceController::class, 'departureConfirmed']); //xác nhận theo chuyến
+            Route::get('departure-unconfimred/{id}', [InvoiceController::class, 'departureUnconfimred']); //chưa xác nhận theo chuyến
+            Route::get('count-status-departure/{id}', [InvoiceController::class, 'countStatusDeparture']); //count vé theo chuyến
             Route::get('confirmed', [InvoiceController::class, 'Confirmed']);
             Route::post('update-departure/{id}', [InvoiceController::class, 'updateDeparture']);
             Route::get('unconfimred', [InvoiceController::class, 'Unconfimred']); //chưa xác nhận

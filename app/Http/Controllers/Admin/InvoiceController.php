@@ -100,6 +100,40 @@ class InvoiceController extends Controller
             return response()->json($departures, 200);
         }
     }
+    //xác nhận theo chuyến
+    public function departureConfirmed(Request $request, $id)
+    {
+        $pagesize = 10;
+        $searchData = $request->except('page');
+        $departure_confirmed =  $this->departure::find($id)->invoice_departure()->where('status', '=', 1)->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
+        $departure_confirmed->load('customer');
+        $departure_confirmed->load('payment_invoice');
+        return response()->json($departure_confirmed, 200);
+    }
+    //chưa xác nhận theo chuyến
+    public function departureUnconfimred(Request $request, $id)
+    {
+        $pagesize = 10;
+        $searchData = $request->except('page');
+        $departure_unconfimred =  $this->departure::find($id)->invoice_departure()->where('status', '=', 0)->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
+        $departure_unconfimred->load('customer');
+        $departure_unconfimred->load('payment_invoice');
+        return response()->json($departure_unconfimred, 200);
+    }
+    //count vé theo chuyến
+    public function countStatusDeparture(Request $request, $id)
+    {
+        $departure_unconfimred =  $this->departure::find($id)->invoice_departure()->where('status', '=', 0)->count();
+        $departure_confirmed =  $this->departure::find($id)->invoice_departure()->where('status', '=', 1)->count();
+        $viewDelete = $this->departure::find($id)->invoice_departure()->onlyTrashed()->count();
+        return response()->json([
+            'data' => [
+                'departure_unconfimred' => $departure_unconfimred,
+                'departure_confirmed' => $departure_confirmed,
+                'viewDelete' => $viewDelete
+            ]
+        ], 200);
+    }
     //vé đã được xác nhận
     public function Confirmed(Request $request)
     {
