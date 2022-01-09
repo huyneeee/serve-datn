@@ -60,12 +60,12 @@ class CarController extends Controller
             'name' => 'required|max:100|min:6',
             'description' => 'required',
             'license_plates' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            //  'image' => 'mimes:jpg,bmp,png,jpeg|required',
             'number_seats' => 'required',
             'color' => 'required',
             'car_phone' => 'required|numeric|digits_between:10,11',
-            'image_path' => 'required',
-            'image_path.*' => 'mimes:jpg,png,jpeg,gif,svg',
+            //  'image_path' => 'required',
+            // 'image_path.*' => 'mimes:jpg,png,jpeg,gif,svg',
             'policy_id' => 'required',
         ]);
         if ($validator->fails()) {
@@ -84,36 +84,28 @@ class CarController extends Controller
                 'status' => $request->status,
                 'color' => $request->color,
                 'car_phone' => $request->car_phone,
-
+                'image' => $request->image,
             ];
-            $dataUpload = $this->storageTraitUpload($request, 'image', 'car');
-            if (!empty($dataUpload)) {
-                $dataCartCreate['image'] = $dataUpload['file_path'];
-            }
+            // $dataUpload = $this->storageTraitUpload($request, 'image', 'car');
+            // if (!empty($dataUpload)) {
+            //     $dataCartCreate['image'] = $dataUpload['file_path'];
+            // }
             $car = $this->car->create($dataCartCreate);
             //insert data car_image
-            if ($request->hasFile('image_path')) {
-                foreach ($request->image_path as $fileItem) {
-                    $dataCartImageDetail = $this->storageTraitUploadMutiple($fileItem, 'car');
-                    $image =   CarImage::create([
-                        'car_id' => $car->id,
-                        'image_path' => $dataCartImageDetail['file_path'],
-                    ]);
-                }
+            foreach ($request->image_path as $key => $fileItem) {
+                //  $dataCartImageDetail = $this->storageTraitUploadMutiple($fileItem, 'car');
+                $image =   CarImage::create([
+                    'car_id' => $car->id,
+                    'image_path' => $request->image_path[$key],
+                ]);
             }
 
-            // if (!empty($request->policy_id)) {
-            //     foreach ($request->policy_id as $prolicy_Item) {
-            //         $policyInstance = Policy::firstOrCreate(['name' => $prolicy_Item, 'detail' => $prolicy_Item]);
-            //         $prolicyIds[] = $policyInstance->id;
-            //     }
-            // }
             //insert data Policy
             $car->policies()->attach($request->policy_id);
             // $car->policies()->attach($prolicyIds);
             DB::commit();
             return response()->json([
-                'data' => $car, $image
+                'data' => $car
             ], 201);
         } catch (\Exception $exception) {
             DB::rollBack();
@@ -150,12 +142,12 @@ class CarController extends Controller
             'name' => 'required|max:100|min:6',
             'description' => 'required',
             'license_plates' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            //  'image' => 'mimes:jpg,bmp,png,jpeg|required',
             'number_seats' => 'required',
             'color' => 'required',
             'car_phone' => 'required|numeric|digits_between:10,11',
-            'image_path' => 'required',
-            'image_path.*' => 'mimes:jpg,png,jpeg,gif,svg',
+            // 'image_path' => 'required',
+            // 'image_path.*' => 'mimes:jpg,png,jpeg,gif,svg',
             'policy_id' => 'required',
         ]);
         if ($validator->fails()) {
@@ -174,23 +166,22 @@ class CarController extends Controller
                 'status' => $request->status,
                 'color' => $request->color,
                 'car_phone' => $request->car_phone,
+                'image' => $request->image,
             ];
-            $dataUpload = $this->storageTraitUpload($request, 'image', 'car');
-            if (!empty($dataUpload)) {
-                $dataCartCreate['image'] = $dataUpload['file_path'];
-            }
+            // $dataUpload = $this->storageTraitUpload($request, 'image', 'car');
+            // if (!empty($dataUpload)) {
+            //     $dataCartCreate['image'] = $dataUpload['file_path'];
+            // }
             $this->car->find($id)->update($dataCartCreate);
             $car = $this->car->find($id);
             //insert data car_image
-            if ($request->hasFile('image_path')) {
-                CarImage::where('car_id', $id)->delete();
-                foreach ($request->image_path as $fileItem) {
-                    $dataCartImageDetail = $this->storageTraitUploadMutiple($fileItem, 'car');
-                    $image =   CarImage::create([
-                        'car_id' => $car->id,
-                        'image_path' => $dataCartImageDetail['file_path'],
-                    ]);
-                }
+            CarImage::where('car_id', $id)->delete();
+            foreach ($request->image_path as $key => $fileItem) {
+                //  $dataCartImageDetail = $this->storageTraitUploadMutiple($fileItem, 'car');
+                $image =   CarImage::create([
+                    'car_id' => $car->id,
+                    'image_path' => $request->image_path[$key],
+                ]);
             }
 
             // if (!empty($request->policy_id)) {
@@ -204,7 +195,7 @@ class CarController extends Controller
             // $car->policies()->attach($prolicyIds);
             DB::commit();
             return response()->json([
-                'data' => $car, $image
+                'data' => $car
             ], 200);
         } catch (\Exception $exception) {
             DB::rollBack();

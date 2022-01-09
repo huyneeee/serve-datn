@@ -79,7 +79,7 @@ class ClientController extends Controller
                 Rule::unique('customers')->ignore($request->id),
                 'email',
             ],
-            'image' => 'mimes:jpg,bmp,png,jpeg',
+            //  'image' => 'mimes:jpg,bmp,png,jpeg',
             'status' => 'boolean',
             'password' => 'min:6|max:40',
             'passwordAgain' => 'same:password',
@@ -100,10 +100,10 @@ class ClientController extends Controller
         $model = $this->customer->find($id);
         $model->fill($request->all());
         $model->password = bcrypt($request->password);
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->storeAs('public/customers', uniqid() . '-' . $request->image->getClientOriginalName());
-            $model->image =  Storage::url($imagePath);
-        }
+        // if ($request->hasFile('image')) {
+        //     $imagePath = $request->file('image')->storeAs('public/customers', uniqid() . '-' . $request->image->getClientOriginalName());
+        //     $model->image =  Storage::url($imagePath);
+        // }
         $model->save();
         $token = $model->createToken('api_authcustomer')->plainTextToken;
         return response()->json([

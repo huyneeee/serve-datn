@@ -192,6 +192,7 @@ Route::prefix('admin')->group(function () {
             Route::get('where-departure', [InvoiceController::class, 'whereDeparture']);
             Route::get('departure-confirmed/{id}', [InvoiceController::class, 'departureConfirmed']); //xác nhận theo chuyến
             Route::get('departure-unconfimred/{id}', [InvoiceController::class, 'departureUnconfimred']); //chưa xác nhận theo chuyến
+            Route::get('view-delete-departure/{id}', [InvoiceController::class, 'viewDeleteDeparture']); //xóa vé theo chuyến
             Route::get('count-status-departure/{id}', [InvoiceController::class, 'countStatusDeparture']); //count vé theo chuyến
             Route::get('confirmed', [InvoiceController::class, 'Confirmed']);
             Route::post('update-departure/{id}', [InvoiceController::class, 'updateDeparture']);

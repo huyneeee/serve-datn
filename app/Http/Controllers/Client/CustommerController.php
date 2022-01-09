@@ -93,7 +93,6 @@ class CustommerController extends Controller
                 Rule::unique('customers')->ignore($this->customer->id),
                 'email',
             ],
-            'image' => 'mimes:jpg,bmp,png,jpeg',
             'status' => 'boolean',
             'password' => 'required|min:6|max:40',
             'passwordAgain' => 'required|same:password',
@@ -159,7 +158,6 @@ class CustommerController extends Controller
                 Rule::unique('customers')->ignore($request->id),
                 'email',
             ],
-            'image' => 'mimes:jpg,bmp,png,jpeg',
             'status' => 'boolean',
             'password' => 'min:6|max:40',
             'passwordAgain' => 'same:password',
@@ -204,7 +202,6 @@ class CustommerController extends Controller
                 Rule::unique('customers')->ignore($request->id),
                 'email',
             ],
-            'image' => 'mimes:jpg,bmp,png,jpeg',
             'status' => 'boolean',
             'newPassword' => 'required|min:6|max:40',
             'phone_number' => [

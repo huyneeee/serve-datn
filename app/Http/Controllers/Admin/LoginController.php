@@ -71,8 +71,8 @@ class LoginController extends Controller
             'name' => 'required|max:100|min:6',
             'email' => 'required|email|unique:users,email',
             'address' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
-            'image_degree' => 'mimes:jpg,bmp,png,jpeg|required',
+            // 'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            // 'image_degree' => 'mimes:jpg,bmp,png,jpeg|required',
             'experience' => 'required',
             'password' => 'required|min:6|max:40',
             'passwordAgain' => 'required|same:password',
@@ -90,14 +90,14 @@ class LoginController extends Controller
             $dataInssert = $this->user;
             $dataInssert->fill($request->all());
             $dataInssert->password = bcrypt($request->password);
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->storeAs('public/users', uniqid() . '-' . $request->image->getClientOriginalName());
-                $dataInssert->image =  Storage::url($imagePath);
-            }
-            if ($request->hasFile('image_degree')) {
-                $image_degreePath = $request->file('image_degree')->storeAs('public/users', uniqid() . '-' . $request->image_degree->getClientOriginalName());
-                $dataInssert->image_degree =  Storage::url($image_degreePath);
-            }
+            // if ($request->hasFile('image')) {
+            //     $imagePath = $request->file('image')->storeAs('public/users', uniqid() . '-' . $request->image->getClientOriginalName());
+            //     $dataInssert->image =  Storage::url($imagePath);
+            // }
+            // if ($request->hasFile('image_degree')) {
+            //     $image_degreePath = $request->file('image_degree')->storeAs('public/users', uniqid() . '-' . $request->image_degree->getClientOriginalName());
+            //     $dataInssert->image_degree =  Storage::url($image_degreePath);
+            // }
             $dataInssert->save();
             $dataInssert->roles()->attach($request->role_id);
             $token = $dataInssert->createToken('api_authUser')->plainTextToken;

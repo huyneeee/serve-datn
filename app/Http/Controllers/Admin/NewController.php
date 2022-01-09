@@ -71,7 +71,7 @@ class NewController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'new_cate' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            // 'image' => 'mimes:jpg,bmp,png,jpeg|required',
             'act' => 'boolean',
             'hot' => 'boolean',
             'short_content' => 'required',
@@ -83,7 +83,7 @@ class NewController extends Controller
                 'errors' => $validator->errors()
             ], 400);
         }
-        $dataImageNews = $this->storageTraitUpload($request, 'image', 'news');
+        //   $dataImageNews = $this->storageTraitUpload($request, 'image', 'news');
         $dataInssert = $this->news->create([
             'name' => $request->name,
             'new_cate' => $request->new_cate,
@@ -91,7 +91,7 @@ class NewController extends Controller
             'content' => $request->content,
             'act' => $request->act,
             'hot' => $request->hot,
-            'image' =>  $dataImageNews['file_path'],
+            'image' =>  $request->image,
             'slug' => $this->uniqueSlug($request),
         ]);
         return response()->json([
@@ -125,7 +125,7 @@ class NewController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'new_cate' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            //   'image' => 'mimes:jpg,bmp,png,jpeg|required',
             'act' => 'boolean',
             'hot' => 'boolean',
             'short_content' => 'required',
@@ -144,12 +144,13 @@ class NewController extends Controller
             'content' => $request->content,
             'act' => $request->act,
             'hot' => $request->hot,
+            'image' => $request->image,
             'slug' => $this->uniqueSlug($request),
         ];
-        $dataImageNews = $this->storageTraitUpload($request, 'image', 'news');
-        if (!empty($dataImageNews)) {
-            $dataUpdate['image'] = $dataImageNews['file_path'];
-        }
+        //  $dataImageNews = $this->storageTraitUpload($request, 'image', 'news');
+        // if (!empty($dataImageNews)) {
+        //     $dataUpdate['image'] = $dataImageNews['file_path'];
+        // }
         $this->news->find($id)->update($dataUpdate);
         return response()->json([
             'data' => $dataUpdate,

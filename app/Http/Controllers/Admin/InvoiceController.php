@@ -120,6 +120,16 @@ class InvoiceController extends Controller
         $departure_unconfimred->load('payment_invoice');
         return response()->json($departure_unconfimred, 200);
     }
+    //hủy vé theo chuyến
+    public function viewDeleteDeparture(Request $request, $id)
+    {
+        $pagesize = 10;
+        $searchData = $request->except('page');
+        $viewDelete = $this->departure::find($id)->invoice_departure()->onlyTrashed()->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
+        $viewDelete->load('customer');
+        $viewDelete->load('payment_invoice');
+        return response()->json($viewDelete, 200);
+    }
     //count vé theo chuyến
     public function countStatusDeparture(Request $request, $id)
     {

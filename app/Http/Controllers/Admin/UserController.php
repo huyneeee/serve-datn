@@ -82,8 +82,8 @@ class UserController extends Controller
             'name' => 'required|max:100|min:6',
             'email' => 'required|email|unique:users,email',
             'address' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
-            'image_degree' => 'mimes:jpg,bmp,png,jpeg',
+            // 'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            // 'image_degree' => 'mimes:jpg,bmp,png,jpeg',
             'password' => 'required|min:6|max:40',
             'passwordAgain' => 'required|same:password',
             'phone' => 'required|numeric|digits_between:10,11',
@@ -100,14 +100,14 @@ class UserController extends Controller
             $dataInssert = $this->user;
             $dataInssert->fill($request->all());
             $dataInssert->password = bcrypt($request->password);
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->storeAs('public/users', uniqid() . '-' . $request->image->getClientOriginalName());
-                $dataInssert->image =  Storage::url($imagePath);
-            }
-            if ($request->hasFile('image_degree')) {
-                $image_degreePath = $request->file('image_degree')->storeAs('public/users', uniqid() . '-' . $request->image_degree->getClientOriginalName());
-                $dataInssert->image_degree =  Storage::url($image_degreePath);
-            }
+            // if ($request->hasFile('image')) {
+            //     $imagePath = $request->file('image')->storeAs('public/users', uniqid() . '-' . $request->image->getClientOriginalName());
+            //     $dataInssert->image =  Storage::url($imagePath);
+            // }
+            // if ($request->hasFile('image_degree')) {
+            //     $image_degreePath = $request->file('image_degree')->storeAs('public/users', uniqid() . '-' . $request->image_degree->getClientOriginalName());
+            //     $dataInssert->image_degree =  Storage::url($image_degreePath);
+            // }
             $dataInssert->save();
             $dataInssert->roles()->attach($request->role_id);
             $token = $dataInssert->createToken('api_authUser')->plainTextToken;
@@ -177,12 +177,12 @@ class UserController extends Controller
                 'email',
             ],
             'address' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            // 'image' => 'mimes:jpg,bmp,png,jpeg|required',
             'password' => 'required|min:6|max:40',
             'passwordAgain' => 'required|same:password',
             'phone' => 'required|numeric|digits_between:10,11',
             'role_id' => 'required',
-            'image_degree' => 'mimes:jpg,bmp,png,jpeg',
+            // 'image_degree' => 'mimes:jpg,bmp,png,jpeg',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -195,14 +195,14 @@ class UserController extends Controller
             $dataUpdate = $this->user->find($id);
             $dataUpdate->fill($request->all());
             $dataUpdate->password = bcrypt($request->password);
-            if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->storeAs('public/users', uniqid() . '-' . $request->image->getClientOriginalName());
-                $dataUpdate->image =  Storage::url($imagePath);
-            }
-            if ($request->hasFile('image_degree')) {
-                $image_degreePath = $request->file('image_degree')->storeAs('public/users', uniqid() . '-' . $request->image_degree->getClientOriginalName());
-                $dataUpdate->image_degree =  Storage::url($image_degreePath);
-            }
+            // if ($request->hasFile('image')) {
+            //     $imagePath = $request->file('image')->storeAs('public/users', uniqid() . '-' . $request->image->getClientOriginalName());
+            //     $dataUpdate->image =  Storage::url($imagePath);
+            // }
+            // if ($request->hasFile('image_degree')) {
+            //     $image_degreePath = $request->file('image_degree')->storeAs('public/users', uniqid() . '-' . $request->image_degree->getClientOriginalName());
+            //     $dataUpdate->image_degree =  Storage::url($image_degreePath);
+            // }
             $dataUpdate->save();
             $dataUpdate->roles()->sync($request->role_id);
             DB::commit();

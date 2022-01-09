@@ -18,6 +18,7 @@ class Notification extends Model
         'status',
         'is_send',
         'role_id',
+        'avatar_notification',
     ];
     public function customer()
     {

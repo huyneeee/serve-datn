@@ -43,7 +43,7 @@ class DashboardController extends Controller
     {
         $invoice = Payment::all();
         if ($request->date_from && $request->date_to) {
-            $invoice = Payment::whereBetween('time', [$request->date_from, $request->date_to])->sum('price');
+            $invoice = Payment::whereBetween('date', [$request->date_from, $request->date_to])->sum('price');
         }
         return response()->json([
             'code' => 200,

@@ -67,7 +67,7 @@ class NewCategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'parent_id' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            //'image' => 'mimes:jpg,bmp,png,jpeg|required',
             'short_content' => 'required',
             'content' => 'required',
         ]);
@@ -77,13 +77,13 @@ class NewCategoryController extends Controller
                 'errors' => $validator->errors()
             ], 400);
         }
-        $dataImageNewCategory = $this->storageTraitUpload($request, 'image', 'new_categories');
+        //  $dataImageNewCategory = $this->storageTraitUpload($request, 'image', 'new_categories');
         $dataInssert = $this->newCategory->create([
             'name' => $request->name,
             'parent_id' => $request->parent_id,
             'short_content' => $request->short_content,
             'content' => $request->content,
-            'image' =>  $dataImageNewCategory['file_path'],
+            'image' =>  $request->image,
             'slug' => $this->uniqueSlug($request),
         ]);
         return response()->json([
@@ -116,7 +116,7 @@ class NewCategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'parent_id' => 'required',
-            'image' => 'mimes:jpg,bmp,png,jpeg|required',
+            //  'image' => 'mimes:jpg,bmp,png,jpeg|required',
             'short_content' => 'required',
             'content' => 'required',
         ]);
@@ -131,12 +131,13 @@ class NewCategoryController extends Controller
             'parent_id' => $request->parent_id,
             'short_content' => $request->short_content,
             'content' => $request->content,
+            'image' => $request->image,
             'slug' => $this->uniqueSlug($request),
         ];
-        $dataImageNewCategory = $this->storageTraitUpload($request, 'image', 'new_categories');
-        if (!empty($dataImageNewCategory)) {
-            $dataUpdate['image'] = $dataImageNewCategory['file_path'];
-        }
+        // $dataImageNewCategory = $this->storageTraitUpload($request, 'image', 'new_categories');
+        // if (!empty($dataImageNewCategory)) {
+        //     $dataUpdate['image'] = $dataImageNewCategory['file_path'];
+        // }
         $this->newCategory->find($id)->update($dataUpdate);
         return response()->json([
             'data' => $dataUpdate,
