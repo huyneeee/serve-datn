@@ -41,9 +41,9 @@ class DashboardController extends Controller
     }
     public function date_from(Request $request)
     {
-        $invoice = Payment::all();
+        $invoice = Invoice::all();
         if ($request->date_from && $request->date_to) {
-            $invoice = Payment::whereBetween('date', [$request->date_from, $request->date_to])->sum('price');
+            $invoice = Invoice::whereBetween('date', [$request->date_from, $request->date_to])->sum('price');
         }
         return response()->json([
             'code' => 200,
@@ -59,26 +59,27 @@ class DashboardController extends Controller
         $seven_date = Carbon::now('Asia/Ho_Chi_Minh')->subDays(7)->toDateString();
         $date_365 = Carbon::now('Asia/Ho_Chi_Minh')->subDays(365)->toDateString();
         $now = Carbon::now('Asia/Ho_Chi_Minh')->toDateString();
+
         if ($request->seven_date == "7ngay") {
-            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('date', [$seven_date, $now])->sum('price');
+            $invoice = Invoice::select('date', Invoice::raw('SUM(total_price) as total_price'), Invoice::raw('SUM(quantity) as quantity'))->where('status', '=', '1')->whereBetween('date', [$seven_date, $now])->groupBy('date')->get();
         } elseif ($request->thangtruoc == "thangtruoc") {
-            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('date', [$dauthangtruoc, $cuoithangtruoc])->sum('price');
+            $invoice = Invoice::select('date', Invoice::raw('SUM(total_price) as total_price'), Invoice::raw('SUM(quantity) as quantity'))->where('status', '=', '1')->whereBetween('date', [$dauthangtruoc, $cuoithangtruoc])->groupBy('date')->get();
         } elseif ($request->thangnay == "thangnay") {
-            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('date', [$dauthangtruoc, $now])->sum('price');
+            $invoice = Invoice::select('date', Invoice::raw('SUM(total_price) as total_price'), Invoice::raw('SUM(quantity) as quantity'))->where('status', '=', '1')->whereBetween('date', [$dauthangnay, $now])->groupBy('date')->get();
         } else {
-            $invoice = Payment::where('vnp_response_code', '=', '00')->whereBetween('date', [$date_365, $now])->sum('price');
+            $invoice = Invoice::select('date', Invoice::raw('SUM(total_price) as total_price'), Invoice::raw('SUM(quantity) as quantity'))->where('status', '=', '1')->whereBetween('date', [$date_365, $now])->groupBy('date')->get();
         }
-        // foreach ($invoice as $key => $value) {
-        //     $invoice_data[] = array(
-        //         'price' => $value->price,
-        //         'note' => $value->note,
-        //         'code_bank' => $value->code_bank,
-        //     );
-        // }
-        // $data = json_encode($invoice_data);
         return response()->json([
             'code' => 200,
             'data' => $invoice
+        ]);
+    }
+    public function dateData(Request $request)
+    {
+        $column = Invoice::select('date', Invoice::raw('SUM(total_price) as total_price'), Invoice::raw('SUM(quantity) as quantity'))->where('status', '=', '1')->groupBy('date')->get();
+        return response()->json([
+            'code' => 200,
+            'data' => $column
         ]);
     }
 }

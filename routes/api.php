@@ -211,10 +211,14 @@ Route::prefix('admin')->group(function () {
             Route::get('users-role/{id}', [NotificationController::class, 'usersRole']);
             Route::get('users-role-count/{id}', [NotificationController::class, 'usersRoleCount']);
         });
+        Route::prefix('drive')->group(function () {
+            Route::get('departure-list', [InvoiceController::class, 'departureList']);
+        });
         Route::prefix('dashboard')->group(function () {
             Route::get('index', [DashboardController::class, 'index']);
             Route::get('date-from', [DashboardController::class, 'date_from']);
             Route::get('date-month', [DashboardController::class, 'date_month']);
+            Route::get('date-data', [DashboardController::class, 'dateData']);
         });
     });
 });

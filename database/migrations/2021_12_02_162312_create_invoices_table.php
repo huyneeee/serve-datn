@@ -26,7 +26,7 @@ class CreateInvoicesTable extends Migration
             $table->string('come_point');
             $table->string('quantity');
             $table->string('total_price');
-            $table->dateTime('date');
+            $table->date('date');
             $table->integer('status')->default(0)->comment('Trạng thái');
             $table->string('form_payment')->comment('Hình thức thanh toán');
             $table->softDeletes();

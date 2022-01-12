@@ -204,4 +204,17 @@ class InvoiceController extends Controller
     {
         return $this->restoreAllModelTrait($this->invoice);
     }
+
+    public function departureList(Request $request)
+    {
+        $pagesize = 10;
+        $searchData = $request->except('page');
+        $drive_id = $request->user()->id;
+        $departure_drive = $this->departure->where('user_id', '=', $drive_id)->orderBy('id', 'desc')->paginate($pagesize)->appends($searchData);
+        foreach ($departure_drive as $item) {
+            $item->load('car_departure');
+            $item->load('invoice_departure');
+        }
+        return response()->json($departure_drive, 200);
+    }
 }

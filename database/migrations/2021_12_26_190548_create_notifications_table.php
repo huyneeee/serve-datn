@@ -15,14 +15,15 @@ class CreateNotificationsTable extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('token_device');
-            $table->string('invoice_id');
-            $table->string('title');
-            $table->text('content');
-            $table->bigInteger('user_id');
-            $table->string('status');
-            $table->integer('is_send')->default(0);
-            $table->bigInteger('role_id');
+            $table->string('token_device')->nullable();
+            $table->bigInteger('invoice_id')->nullable();
+            $table->string('title')->nullable();
+            $table->text('content')->nullable();
+            $table->bigInteger('user_id')->nullable();
+            $table->string('status')->nullable()->comment('0 là chưa xem 1 là đã xem');
+            $table->integer('is_send')->default(0)->comment('0 là gửi đi 1 là nhận');
+            $table->bigInteger('role_id')->nullable();
+            $table->string('avatar_notification')->nullable();
             $table->timestamps();
         });
     }
