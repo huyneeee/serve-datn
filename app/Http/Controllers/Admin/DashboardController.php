@@ -20,11 +20,8 @@ class DashboardController extends Controller
         $car = Car::count();
         $departure = Departure::count();
         $customer = Customer::count();
-        $total_price_thanh_toan = Payment::sum('price');
-        $dadat = Invoice::count();
-        $dathanhtoan = Payment::where('vnp_response_code', '=', '00')->count();
-        $chuathanhtoan = Payment::where('vnp_response_code', '<>', '00')->count();
-        //  dd($dadat);
+        $total_price_thanh_toan = Invoice::where('status', '=', '1')->sum('total_price');
+        $count_invoice = Invoice::count();
         return response()->json([
             'code' => 200,
             'data' => [
@@ -33,9 +30,7 @@ class DashboardController extends Controller
                 'departure' => $departure,
                 'customer' => $customer,
                 'total_price_thanh_toan' => $total_price_thanh_toan,
-                'dadat' => $dadat,
-                'dathanhtoan' => $dathanhtoan,
-                'chuathanhtoan' => $chuathanhtoan,
+                'count_invoice' => $count_invoice,
             ],
         ]);
     }

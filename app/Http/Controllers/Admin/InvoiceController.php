@@ -205,6 +205,7 @@ class InvoiceController extends Controller
         return $this->restoreAllModelTrait($this->invoice);
     }
 
+    //list chuyến theo lái xe
     public function departureList(Request $request)
     {
         $pagesize = 10;

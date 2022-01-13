@@ -244,7 +244,7 @@ Route::prefix('client')->group(function () {
         //hiển thị bình luận chuyến
         Route::get('view-comment-departure/{id}', [PageController::class, 'view_comment_departure']);
         //show chuyến 
-        //   Route::get('departure-all', [PageController::class, 'departureAll']);
+        Route::get('departure-all', [PageController::class, 'departureAll']);
         //update chuyến
         Route::post('update-departure/{id}', [PageController::class, 'updateDeparture']);
         //show chuyến theo bộ lọc

@@ -33,36 +33,20 @@ class PageController extends Controller
         $this->news = $news;
     }
 
-    // public function departureAll(Request $request)
-    // {
-    //     $pagesize = 10;
-    //     $searchData = $request->except('page');
-    //     if (count($request->all()) == 0) {
-    //         // Lấy ra danh sách sản phẩm & phân trang cho nó
-    //         $departures = $this->departure->orderBy('id', 'desc')->paginate($pagesize);
-    //         // $departures = $this->departure::with(['comment_departure' => function ($query) {
-    //         //     $query->where('status', '<>', 0);
-    //         // }])->get();
-    //         $departures->load('car_departure');
-    //         $departures->load('user_departure');
-    //         $departures->load('car_images');
-    //         $departures->load('policies');
-    //     } else {
-    //         $departuresQuery = $this->departure->where('name', 'like', "%" . $request->keyword . "%");
-    //         if ($request->has('price') && $request->price != "") {
-    //             $departuresQuery = $departuresQuery->where('price', $request->price);
-    //         }
-    //         $departures = $departuresQuery->orderBy('id', 'desc')->paginate($pagesize)->appends($searchData);
-    //         // $departures = $this->departure::with(['comment_departure' => function ($query) {
-    //         //     $query->where('status', '<>', 0);
-    //         // }])->get();
-    //         $departures->load('car_departure');
-    //         $departures->load('user_departure');
-    //         $departures->load('car_images');
-    //         $departures->load('policies');
-    //     }
-    //     return response()->json($departures, 201);
-    // }
+    public function departureAll(Request $request)
+    {
+        $pagesize = 10;
+        $searchData = $request->except('page');
+        $ten_minutes = Carbon::now('Asia/Ho_Chi_Minh')->addHours(1)->toDateTimeString();
+        $departureWhereTime = $this->departure->where('start_time', '>', $ten_minutes);
+        $departureWhere = $departureWhereTime->where('seats_departures', '<>', 0);
+        if ($departureWhere == true) {
+            $departures = $departureWhere->orderBy('id', 'desc')->paginate($pagesize);
+            $departures->load('car_departure');
+            $departures->load('user_departure');
+            return response()->json($departures, 201);
+        }
+    }
     //xuất chuyến theo bộ lọc
     public function departureFilter(Request $request)
     {
@@ -177,7 +161,7 @@ class PageController extends Controller
     {
         $pagesize = 10;
         $searchData = $request->except('page');
-        $customer_id = $request->user()->customer_invoice()->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
+        $customer_id = $request->user()->customer_invoice()->orderBy('id', 'desc')->paginate($pagesize)->appends($searchData);
         foreach ($customer_id as $item) {
             $item->load('departure');
             $item->load('payment_invoice');
