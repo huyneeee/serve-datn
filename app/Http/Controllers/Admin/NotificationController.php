@@ -54,18 +54,28 @@ class NotificationController extends Controller
     {
         $pagesize = 10;
         $searchData = $request->except('page');
-        $usersRole_id = $this->role->find($id)->notification_role()->where('is_send', '=', 1)->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
-        return response()->json($usersRole_id, 200);
+        if ($request->is_send) {
+            $usersRole_id = $this->role->find($id)->notification_role()->where('is_send', '=', $request->is_send)->orderBy('created_at', 'desc')->paginate($pagesize)->appends($searchData);
+            return response()->json($usersRole_id, 200);
+        }
+        return response()->json([
+            'message' => "Không có dữ liệu"
+        ], 200);
     }
 
     //đếm thông báo của user
     public function usersRoleCount(Request $request, $id)
     {
-        $usersRole_id = $this->role->find($id)->notification_role()->where('is_send', '=', 1)->get();
-        $usersRole_count =   $usersRole_id->where('status', '=', 0)->count();
+        if ($request->is_send) {
+            $usersRole_id = $this->role->find($id)->notification_role()->where('is_send', '=',  $request->is_send)->get();
+            $usersRole_count =   $usersRole_id->where('status', '=', 0)->count();
+            return response()->json([
+                'data' => $usersRole_count
+            ], 200);
+        }
         return response()->json([
-            'data' => $usersRole_count
-        ], 200);
+            'message' => "Không có dữ liệu"
+        ], 400);
     }
     /**
      * Update the specified resource in storage.

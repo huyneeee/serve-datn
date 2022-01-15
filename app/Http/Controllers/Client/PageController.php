@@ -166,9 +166,7 @@ class PageController extends Controller
             $item->load('departure');
             $item->load('payment_invoice');
         }
-        return response()->json([
-            'data' => $customer_id,
-        ], 200);
+        return response()->json($customer_id, 200);
     }
 
     //list tin tức
