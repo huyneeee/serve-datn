@@ -35,6 +35,7 @@ class RoleController extends Controller
             $rolesQuery = $this->role->where('name', 'like', "%" . $request->keyword . "%");
             $roles = $rolesQuery->paginate($pagesize)->appends($searchData);
         }
+        $roles->load('permissions');
         return response()->json($roles, 200);
     }
 
